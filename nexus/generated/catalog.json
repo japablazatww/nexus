@@ -1,0 +1,253 @@
+{
+  "services": [
+    {
+      "namespace": "libreria-a.system",
+      "method": "GetSystemStatus",
+      "description": "GetSystemStatus checks the status of the system given an admin code.",
+      "inputs": [
+        {
+          "name": "code",
+          "type": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "result_0",
+          "type": "string"
+        },
+        {
+          "name": "result_1",
+          "type": "error"
+        }
+      ]
+    },
+    {
+      "namespace": "libreria-a.transfers.national",
+      "method": "GetUserBalance",
+      "description": "GetUserBalance retrieves the balance for a user and account.",
+      "inputs": [
+        {
+          "name": "user_i_d",
+          "type": "string"
+        },
+        {
+          "name": "account_i_d",
+          "type": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "result_0",
+          "type": "float64"
+        },
+        {
+          "name": "result_1",
+          "type": "error"
+        }
+      ]
+    },
+    {
+      "namespace": "libreria-a.transfers.national",
+      "method": "Transfer",
+      "description": "Transfer performs a local money transfer.",
+      "inputs": [
+        {
+          "name": "source_account",
+          "type": "string"
+        },
+        {
+          "name": "dest_account",
+          "type": "string"
+        },
+        {
+          "name": "amount",
+          "type": "float64"
+        },
+        {
+          "name": "currency",
+          "type": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "result_0",
+          "type": "string"
+        },
+        {
+          "name": "result_1",
+          "type": "error"
+        }
+      ]
+    },
+    {
+      "namespace": "libreria-a.transfers.national",
+      "method": "ComplexTransfer",
+      "description": "ComplexTransfer performs a transfer using a struct input/output.",
+      "inputs": [
+        {
+          "name": "req",
+          "type": "TransferRequest"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "result_0",
+          "type": "TransferResponse"
+        },
+        {
+          "name": "result_1",
+          "type": "error"
+        }
+      ]
+    },
+    {
+      "namespace": "libreria-a.transfers.international",
+      "method": "InternationalTransfer",
+      "description": "InternationalTransfer performs a cross-border transfer.",
+      "inputs": [
+        {
+          "name": "source_account",
+          "type": "string"
+        },
+        {
+          "name": "dest_iban",
+          "type": "string"
+        },
+        {
+          "name": "amount",
+          "type": "float64"
+        },
+        {
+          "name": "swift_code",
+          "type": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "result_0",
+          "type": "string"
+        },
+        {
+          "name": "result_1",
+          "type": "error"
+        }
+      ]
+    },
+    {
+      "namespace": "libreria-b.loans",
+      "method": "CalculateLoan",
+      "description": "CalculateLoan determines if a loan is feasible and calculates payment.",
+      "inputs": [
+        {
+          "name": "req",
+          "type": "LoanRequest"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "result_0",
+          "type": "LoanResponse"
+        },
+        {
+          "name": "result_1",
+          "type": "error"
+        }
+      ]
+    }
+  ],
+  "structs": [
+    {
+      "Name": "TransferRequest",
+      "JsonName": "transfer_request",
+      "Fields": [
+        {
+          "Name": "SourceAccount",
+          "Type": "string",
+          "JSONTag": "source_account"
+        },
+        {
+          "Name": "DestAccount",
+          "Type": "string",
+          "JSONTag": "dest_account"
+        },
+        {
+          "Name": "Amount",
+          "Type": "float64",
+          "JSONTag": "amount"
+        },
+        {
+          "Name": "Currency",
+          "Type": "string",
+          "JSONTag": "currency"
+        }
+      ],
+      "Namespace": "libreria-a.transfers.national"
+    },
+    {
+      "Name": "TransferResponse",
+      "JsonName": "transfer_response",
+      "Fields": [
+        {
+          "Name": "TransactionID",
+          "Type": "string",
+          "JSONTag": "transaction_id"
+        },
+        {
+          "Name": "Status",
+          "Type": "string",
+          "JSONTag": "status"
+        }
+      ],
+      "Namespace": "libreria-a.transfers.national"
+    },
+    {
+      "Name": "LoanRequest",
+      "JsonName": "loan_request",
+      "Fields": [
+        {
+          "Name": "Amount",
+          "Type": "float64",
+          "JSONTag": "amount"
+        },
+        {
+          "Name": "Term",
+          "Type": "int",
+          "JSONTag": "term"
+        },
+        {
+          "Name": "UserType",
+          "Type": "string",
+          "JSONTag": "user_type"
+        }
+      ],
+      "Namespace": "libreria-b.loans"
+    },
+    {
+      "Name": "LoanResponse",
+      "JsonName": "loan_response",
+      "Fields": [
+        {
+          "Name": "Approved",
+          "Type": "bool",
+          "JSONTag": "approved"
+        },
+        {
+          "Name": "InterestRate",
+          "Type": "float64",
+          "JSONTag": "interest_rate"
+        },
+        {
+          "Name": "MonthlyPay",
+          "Type": "float64",
+          "JSONTag": "monthly_pay"
+        },
+        {
+          "Name": "Message",
+          "Type": "string",
+          "JSONTag": "message"
+        }
+      ],
+      "Namespace": "libreria-b.loans"
+    }
+  ]
+}
