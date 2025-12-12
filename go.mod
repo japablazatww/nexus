@@ -1,4 +1,4 @@
-module github.com/japablazatww/centralnexus
+module github.com/japablazatww/nexus
 
 go 1.23.1
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/japablazatww/centralnexus/nexus/generated"
+	"github.com/japablazatww/nexus/nexus/generated"
 )
 
 func main() {
