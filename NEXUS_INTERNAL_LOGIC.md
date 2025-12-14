@@ -23,7 +23,7 @@ La pieza central es la herramienta de línea de comandos `nexus-cli`. Su comando
 Cuando ejecutas `nexus-cli build`, ocurren 4 fases secuenciales:
 
 #### Fase A: Ingestión y Aislamiento
-1.  **Lectura del Registro**: Lee `registry.json` para saber qué librerías procesar (e.g., `github.com/japablazatww/libreria-a`).
+1.  **Lectura del Registro**: Lee `registry.json` para saber qué librerías procesar. Soporta cualquier path de importación (e.g., `github.com/org/repo`, `gitlab.com/xyz/abc`).
 2.  **Entorno Temporal**: Crea un directorio temporal (e.g., `/tmp/nexus-build-xyz`) y ejecuta `go mod init`.
 3.  **Descarga**: Ejecuta `go get package@branch` (actualmente forzado a `@develop`). Esto descarga el código fuente real de las librerías al entorno temporal.
 

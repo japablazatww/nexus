@@ -75,6 +75,6 @@ Al trabajar en equipo:
 
 *Si hay conflicto en archivos generados, simplemente descarta tus cambios locales en `generated/` y corre `nexus-cli build` nuevamente.*
 
-1.  Edita `nexus/cmd/nexus-cli`.
+1.  Edita `nexus/cmd/nexus-cli` (lógica modularizada en `internal/`).
 2.  Actualiza el registro en `nexus/cmd/nexus-cli/registry.json`.
 3.  Reinstala localmente (`go install .`).
