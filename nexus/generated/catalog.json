@@ -3,6 +3,7 @@
     {
       "namespace": "libreria-a.system",
       "method": "GetSystemStatus",
+      "import_path": "github.com/japablazatww/libreria-a/system",
       "description": "GetSystemStatus checks the status of the system given an admin code.",
       "inputs": [
         {
@@ -24,6 +25,7 @@
     {
       "namespace": "libreria-a.transfers.national",
       "method": "GetUserBalance",
+      "import_path": "github.com/japablazatww/libreria-a/transfers/national",
       "description": "GetUserBalance retrieves the balance for a user and account.",
       "inputs": [
         {
@@ -49,6 +51,7 @@
     {
       "namespace": "libreria-a.transfers.national",
       "method": "Transfer",
+      "import_path": "github.com/japablazatww/libreria-a/transfers/national",
       "description": "Transfer performs a local money transfer.",
       "inputs": [
         {
@@ -82,6 +85,7 @@
     {
       "namespace": "libreria-a.transfers.national",
       "method": "ComplexTransfer",
+      "import_path": "github.com/japablazatww/libreria-a/transfers/national",
       "description": "ComplexTransfer performs a transfer using a struct input/output.",
       "inputs": [
         {
@@ -103,6 +107,7 @@
     {
       "namespace": "libreria-a.transfers.international",
       "method": "InternationalTransfer",
+      "import_path": "github.com/japablazatww/libreria-a/transfers/international",
       "description": "InternationalTransfer performs a cross-border transfer.",
       "inputs": [
         {
@@ -136,6 +141,7 @@
     {
       "namespace": "libreria-b.loans",
       "method": "CalculateLoan",
+      "import_path": "github.com/japablazatww/libreria-b/loans",
       "description": "CalculateLoan determines if a loan is feasible and calculates payment.",
       "inputs": [
         {
@@ -151,6 +157,24 @@
         {
           "name": "result_1",
           "type": "error"
+        }
+      ]
+    },
+    {
+      "namespace": "libreria-b.loans",
+      "method": "SayHello",
+      "import_path": "github.com/japablazatww/libreria-b/loans",
+      "description": "",
+      "inputs": [
+        {
+          "name": "msn",
+          "type": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "result_0",
+          "type": "string"
         }
       ]
     }

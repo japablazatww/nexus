@@ -114,6 +114,10 @@ func (c *LibreriabLoansClient) CalculateLoan(req GenericRequest) (interface{}, e
 	return c.transport.Call("libreria-b.loans.CalculateLoan", req)
 }
 
+func (c *LibreriabLoansClient) SayHello(req GenericRequest) (interface{}, error) {
+	return c.transport.Call("libreria-b.loans.SayHello", req)
+}
+
 
 type LibreriabClient struct {
 	transport Transport

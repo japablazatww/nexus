@@ -30,6 +30,8 @@ func RegisterHandlers(mux *http.ServeMux) {
 	
 	mux.HandleFunc("/libreria-b.loans.CalculateLoan", handlelibreria_b_loans_CalculateLoan)
 	
+	mux.HandleFunc("/libreria-b.loans.SayHello", handlelibreria_b_loans_SayHello)
+	
 }
 
 
@@ -59,7 +61,7 @@ func handlelibreria_a_system_GetSystemStatus(w http.ResponseWriter, r *http.Requ
 }
 
 func wrapperlibreria_a_system_GetSystemStatus(params map[string]interface{}) (interface{}, error) {
-    // Inputs: code(string), 
+    // Inputs: code(string)
     
     
     
@@ -90,14 +92,15 @@ func wrapperlibreria_a_system_GetSystemStatus(params map[string]interface{}) (in
     
 
     // Call
-    ret0, ret1 := libreria_a_system.GetSystemStatus(val_code, )
     
-    
-    // Handle error convention (last return is error)
-    if ret1 != nil {
-        return nil, ret1
-    }
-    return ret0, nil
+        
+            // Expected: (val, error)
+            ret0, err := libreria_a_system.GetSystemStatus(val_code)
+            if err != nil {
+                return nil, err
+            }
+            return ret0, nil
+        
     
 }
 
@@ -127,7 +130,7 @@ func handlelibreria_a_transfers_national_GetUserBalance(w http.ResponseWriter, r
 }
 
 func wrapperlibreria_a_transfers_national_GetUserBalance(params map[string]interface{}) (interface{}, error) {
-    // Inputs: user_i_d(string), account_i_d(string), 
+    // Inputs: user_i_d(string), account_i_d(string)
     
     
     
@@ -183,14 +186,15 @@ func wrapperlibreria_a_transfers_national_GetUserBalance(params map[string]inter
     
 
     // Call
-    ret0, ret1 := libreria_a_transfers_national.GetUserBalance(val_user_i_d, val_account_i_d, )
     
-    
-    // Handle error convention (last return is error)
-    if ret1 != nil {
-        return nil, ret1
-    }
-    return ret0, nil
+        
+            // Expected: (val, error)
+            ret0, err := libreria_a_transfers_national.GetUserBalance(val_user_i_d, val_account_i_d)
+            if err != nil {
+                return nil, err
+            }
+            return ret0, nil
+        
     
 }
 
@@ -220,7 +224,7 @@ func handlelibreria_a_transfers_national_Transfer(w http.ResponseWriter, r *http
 }
 
 func wrapperlibreria_a_transfers_national_Transfer(params map[string]interface{}) (interface{}, error) {
-    // Inputs: source_account(string), dest_account(string), amount(float64), currency(string), 
+    // Inputs: source_account(string), dest_account(string), amount(float64), currency(string)
     
     
     
@@ -326,14 +330,15 @@ func wrapperlibreria_a_transfers_national_Transfer(params map[string]interface{}
     
 
     // Call
-    ret0, ret1 := libreria_a_transfers_national.Transfer(val_source_account, val_dest_account, val_amount, val_currency, )
     
-    
-    // Handle error convention (last return is error)
-    if ret1 != nil {
-        return nil, ret1
-    }
-    return ret0, nil
+        
+            // Expected: (val, error)
+            ret0, err := libreria_a_transfers_national.Transfer(val_source_account, val_dest_account, val_amount, val_currency)
+            if err != nil {
+                return nil, err
+            }
+            return ret0, nil
+        
     
 }
 
@@ -363,7 +368,7 @@ func handlelibreria_a_transfers_national_ComplexTransfer(w http.ResponseWriter, 
 }
 
 func wrapperlibreria_a_transfers_national_ComplexTransfer(params map[string]interface{}) (interface{}, error) {
-    // Inputs: req(TransferRequest), 
+    // Inputs: req(TransferRequest)
     
     
     
@@ -396,14 +401,15 @@ func wrapperlibreria_a_transfers_national_ComplexTransfer(params map[string]inte
     
 
     // Call
-    ret0, ret1 := libreria_a_transfers_national.ComplexTransfer(val_req, )
     
-    
-    // Handle error convention (last return is error)
-    if ret1 != nil {
-        return nil, ret1
-    }
-    return ret0, nil
+        
+            // Expected: (val, error)
+            ret0, err := libreria_a_transfers_national.ComplexTransfer(val_req)
+            if err != nil {
+                return nil, err
+            }
+            return ret0, nil
+        
     
 }
 
@@ -433,7 +439,7 @@ func handlelibreria_a_transfers_international_InternationalTransfer(w http.Respo
 }
 
 func wrapperlibreria_a_transfers_international_InternationalTransfer(params map[string]interface{}) (interface{}, error) {
-    // Inputs: source_account(string), dest_iban(string), amount(float64), swift_code(string), 
+    // Inputs: source_account(string), dest_iban(string), amount(float64), swift_code(string)
     
     
     
@@ -539,14 +545,15 @@ func wrapperlibreria_a_transfers_international_InternationalTransfer(params map[
     
 
     // Call
-    ret0, ret1 := libreria_a_transfers_international.InternationalTransfer(val_source_account, val_dest_iban, val_amount, val_swift_code, )
     
-    
-    // Handle error convention (last return is error)
-    if ret1 != nil {
-        return nil, ret1
-    }
-    return ret0, nil
+        
+            // Expected: (val, error)
+            ret0, err := libreria_a_transfers_international.InternationalTransfer(val_source_account, val_dest_iban, val_amount, val_swift_code)
+            if err != nil {
+                return nil, err
+            }
+            return ret0, nil
+        
     
 }
 
@@ -576,7 +583,7 @@ func handlelibreria_b_loans_CalculateLoan(w http.ResponseWriter, r *http.Request
 }
 
 func wrapperlibreria_b_loans_CalculateLoan(params map[string]interface{}) (interface{}, error) {
-    // Inputs: req(LoanRequest), 
+    // Inputs: req(LoanRequest)
     
     
     
@@ -609,14 +616,82 @@ func wrapperlibreria_b_loans_CalculateLoan(params map[string]interface{}) (inter
     
 
     // Call
-    ret0, ret1 := libreria_b_loans.CalculateLoan(val_req, )
+    
+        
+            // Expected: (val, error)
+            ret0, err := libreria_b_loans.CalculateLoan(val_req)
+            if err != nil {
+                return nil, err
+            }
+            return ret0, nil
+        
+    
+}
+
+func handlelibreria_b_loans_SayHello(w http.ResponseWriter, r *http.Request) {
+	var req GenericRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// 1. Extract Parameters
+	params := req.Params
+	
+	// 2. Call Implementation
+	resp, err := wrapperlibreria_b_loans_SayHello(params)
+	
+	// 3. Response
+	w.Header().Set("Content-Type", "application/json")
+	
+	if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+        return
+	}
+	json.NewEncoder(w).Encode(resp)
+	
+}
+
+func wrapperlibreria_b_loans_SayHello(params map[string]interface{}) (interface{}, error) {
+    // Inputs: msn(string)
     
     
-    // Handle error convention (last return is error)
-    if ret1 != nil {
-        return nil, ret1
+    
+    
+    // Determine Type string (Primitive vs Complex)
+    
+    var val_msn string
+    
+
+    // Fuzzy Match Logic
+    found_msn := false
+    target_msn := strings.ToLower(strings.ReplaceAll("msn", "_", ""))
+    
+    for k, v := range params {
+        normalizedK := strings.ToLower(strings.ReplaceAll(k, "_", ""))
+        if normalizedK == target_msn {
+            
+            val_msn, _ = v.(string)
+            
+            found_msn = true
+            break
+        }
     }
-    return ret0, nil
+    
+    if !found_msn {
+       // Optional: Log or Error if required param missing?
+    }
+    
+
+    // Call
+    
+        // No error returned
+        
+            // Expected: (val)
+            ret0 := libreria_b_loans.SayHello(val_msn)
+            return ret0, nil
+        
     
 }
 
