@@ -15,10 +15,16 @@ Todo esto sin escribir archivos `.proto` ni configuraciones manuales complejas. 
 ---
 
 ## 2. El Cerebro: `nexus-cli`
+La pieza central es la herramienta de línea de comandos `nexus-cli`. Su comando principal, `nexus-cli build`, orquesta todo el ciclo de vida. Además, `nexus-cli search` permite la exploración de servicios.
 
-La pieza central es la herramienta de línea de comandos `nexus-cli`. Su comando principal, `nexus-cli build`, orquesta todo el ciclo de vida.
+### 2.1 Motor de Búsqueda (Search Logic)
+Nexus mantiene un índice (`catalog.json`) en `~/.nexus` que permite búsquedas instantáneas sin re-escanear código.
+*   **Búsqueda Paramétrica**: Busca coincidencias en los nombres de Inputs y Outputs de los servicios.
+*   **Búsqueda Estructural**:
+    *   Si buscas un **Struct** (e.g., `LoanRequest`), encuentra qué servicios lo usan como parámetro.
+    *   Si buscas un **Campo** (e.g., `Approved`), encuentra el struct que lo contiene y, por ende, los servicios asociados.
 
-### Ciclo de Vida de `build`
+### 2.2 Ciclo de Vida de `build`
 
 Cuando ejecutas `nexus-cli build`, ocurren 4 fases secuenciales:
 
@@ -42,6 +48,9 @@ Aquí ocurre la magia. Nexus no importa la librería para ejecutarla todavía; l
     *   Almacena esta metadata para recrear los structs idénticos en el cliente y servidor generado.
 
 #### Fase C: Generación de Código (Templates)
+> [!NOTE]
+> Si se ejecuta con `--catalog-only`, el proceso se detiene aquí. Se actualiza el catálogo global y local, pero se omite la generación de archivos Go para agilizar el proceso de indexación.
+
 Con el `Catalog` en memoria, Nexus escribe **tres** archivos Go críticos en tu carpeta `nexus/generated`.
 
 **1. `server_gen.go` (El Servidor)**

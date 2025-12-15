@@ -25,6 +25,7 @@ func main() {
 	buildCmd := flag.NewFlagSet("build", flag.ExitOnError)
 	buildDebug := buildCmd.Bool("debug", false, "Enable verbose output")
 	buildOutput := buildCmd.String("output", "", "Path to the 'nexus/generated' directory")
+	buildCatalogOnly := buildCmd.Bool("catalog-only", false, "Only update catalog, do not generate code")
 
 	searchCmd := flag.NewFlagSet("search", flag.ExitOnError)
 	searchParam := searchCmd.String("search-param", "", "Search service by parameter name")
@@ -42,7 +43,7 @@ func main() {
 	switch os.Args[1] {
 	case "build":
 		buildCmd.Parse(os.Args[2:])
-		runBuild(*buildDebug, *buildOutput)
+		runBuild(*buildDebug, *buildOutput, *buildCatalogOnly)
 	case "search":
 		searchCmd.Parse(os.Args[2:])
 		runSearch(*searchParam, *searchDebug)
@@ -87,7 +88,7 @@ func runSearch(query string, debug bool) {
 	catalog, err := search.LoadCatalog(catalogPath)
 	if err != nil {
 		fmt.Println("Catalog not found or invalid. Running auto-discovery...")
-		runBuild(debug, "") // Propagate debug, no output override
+		runBuild(debug, "", false) // Propagate debug, no output override, full build
 		// Re-read
 		catalog, err = search.LoadCatalog(catalogPath)
 		if err != nil {
@@ -168,7 +169,7 @@ func resolveOutputDir(flagPath string) (string, error) {
 
 // --- Build / Crawler Logic ---
 
-func runBuild(debug bool, outputFlag string) {
+func runBuild(debug bool, outputFlag string, catalogOnly bool) {
 	fmt.Println("Starting Nexus Library Discovery (DDD Mode)...")
 
 	// Create Temp Dir
@@ -230,10 +231,16 @@ func runBuild(debug bool, outputFlag string) {
 		fmt.Println("Tip: Use --output <path> to specify the 'nexus/generated' folder.")
 		return
 	}
-	fmt.Printf("Writing generated code to: %s\n", outputDir)
 
 	// Dump Local Catalog
 	writeLocalCatalog(catalog, outputDir)
+
+	if catalogOnly {
+		fmt.Println("Catalog updated. Skipping code generation (--catalog-only).")
+		return
+	}
+
+	fmt.Printf("Writing generated code to: %s\n", outputDir)
 
 	if err := generator.GenerateServer(catalog, allMetadata, outputDir); err != nil {
 		fmt.Printf("Error generating server: %v\n", err)
