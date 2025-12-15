@@ -26,7 +26,10 @@ $env:GOPROXY="direct"
 go install github.com/japablazatww/nexus/nexus/cmd/nexus-cli@develop
 
 # Uso (dentro del repo)
+# Uso: Búsqueda
 nexus-cli search --search-param user_id
+nexus-cli search --search-param LoanRequest    # Búsqueda por Struct
+nexus-cli search --search-param Approved       # Búsqueda por Campo de Struct
 ```
 
 ### 2. Ejecución con Docker
@@ -49,8 +52,11 @@ Se debe regenerar y comitear cuando:
 2.  Se modifica la lógica del generador.
 
 ```bash
-# Regenerar adaptadores
+# Regenerar todo (Catalog + Code)
 nexus-cli build
+
+# Solo actualizar Catálogo (Búsqueda) sin regenerar código
+nexus-cli build --catalog-only
 ```
 
 Si estás colaborando, siempre sube los cambios de `nexus/generated` para que otros devs (o el CI/CD) tengan el servidor listo para correr.
