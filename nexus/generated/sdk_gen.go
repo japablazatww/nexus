@@ -41,17 +41,6 @@ func (t *httpTransport) Call(method string, req GenericRequest) (interface{}, er
 // --- Structs ---
 
 
-type LibreriaaSystemClient struct {
-	transport Transport
-	
-}
-
-
-func (c *LibreriaaSystemClient) GetSystemStatus(req GenericRequest) (interface{}, error) {
-	return c.transport.Call("libreria-a.system.GetSystemStatus", req)
-}
-
-
 type LibreriaaTransfersNationalClient struct {
 	transport Transport
 	
@@ -93,12 +82,23 @@ type LibreriaaTransfersClient struct {
 
 
 
+type LibreriaaSystemClient struct {
+	transport Transport
+	
+}
+
+
+func (c *LibreriaaSystemClient) GetSystemStatus(req GenericRequest) (interface{}, error) {
+	return c.transport.Call("libreria-a.system.GetSystemStatus", req)
+}
+
+
 type LibreriaaClient struct {
 	transport Transport
 	
-	System *LibreriaaSystemClient
-	
 	Transfers *LibreriaaTransfersClient
+	
+	System *LibreriaaSystemClient
 	
 }
 
@@ -148,13 +148,13 @@ func NewClient(baseURL string) *Client {
 	c := &Client{transport: t}
 	
 	// Dynamic Init
+	c.Libreriab = &LibreriabClient{transport: t}
+	c.Libreriab.Loans = &LibreriabLoansClient{transport: t}
 	c.Libreriaa = &LibreriaaClient{transport: t}
 	c.Libreriaa.System = &LibreriaaSystemClient{transport: t}
 	c.Libreriaa.Transfers = &LibreriaaTransfersClient{transport: t}
 	c.Libreriaa.Transfers.National = &LibreriaaTransfersNationalClient{transport: t}
 	c.Libreriaa.Transfers.International = &LibreriaaTransfersInternationalClient{transport: t}
-	c.Libreriab = &LibreriabClient{transport: t}
-	c.Libreriab.Loans = &LibreriabLoansClient{transport: t}
 
 	return c
 }

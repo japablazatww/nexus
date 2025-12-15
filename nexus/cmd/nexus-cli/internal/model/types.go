@@ -60,5 +60,8 @@ type SearchResult struct {
 	Namespace    string
 	Method       string
 	MatchedParam string
-	ParamType    string // "Input" or "Output"
+	ParamType    string // "Input", "Output", "Struct", "Struct Field"
+	Description  string // Service description
+	StructName   string // Name of the struct if matched (optional)
+	FieldName    string // Name of the field if matched (optional)
 }

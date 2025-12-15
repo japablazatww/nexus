@@ -113,6 +113,9 @@ func runSearch(query string, debug bool) {
 			for _, res := range results {
 				fmt.Printf("- %s.%s\n", res.Namespace, res.Method)
 				fmt.Printf("  Match: %s (%s)\n", res.MatchedParam, res.ParamType)
+				if res.Description != "" {
+					fmt.Printf("  Description: %s\n", res.Description)
+				}
 			}
 		}
 	} else {

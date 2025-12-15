@@ -22,6 +22,28 @@ func SearchByParam(catalog model.Catalog, query string) []model.SearchResult {
 	var results []model.SearchResult
 	normalizedQuery := normalize(query)
 
+	// 1. Build a map of "StructName -> Services that use it" for fast lookup
+	// This handles standard usage where a service uses a struct as Input or Output.
+	// We want to find "Who uses LoanRequest?" -> Service A
+	structUsage := make(map[string][]model.ServiceEntry)
+
+	for _, svc := range catalog.Services {
+		// Check Inputs
+		for _, inp := range svc.Inputs {
+			// Naive check: does the type name contain the struct name?
+			// Type could be "*LoanRequest", "[]LoanRequest", "LoanRequest"
+			// We will just store the service for every param type involved.
+			cleanType := strings.TrimLeft(inp.Type, "[]*")
+			structUsage[cleanType] = append(structUsage[cleanType], svc)
+		}
+		// Check Outputs
+		for _, out := range svc.Outputs {
+			cleanType := strings.TrimLeft(out.Type, "[]*")
+			structUsage[cleanType] = append(structUsage[cleanType], svc)
+		}
+	}
+
+	// 2. Search Services Inputs/Outputs (Direct Param Match)
 	for _, svc := range catalog.Services {
 		// Check Inputs
 		for _, param := range svc.Inputs {
@@ -31,6 +53,7 @@ func SearchByParam(catalog model.Catalog, query string) []model.SearchResult {
 					Method:       svc.Method,
 					MatchedParam: param.Name,
 					ParamType:    "Input",
+					Description:  svc.Description,
 				})
 			}
 		}
@@ -42,10 +65,51 @@ func SearchByParam(catalog model.Catalog, query string) []model.SearchResult {
 					Method:       svc.Method,
 					MatchedParam: param.Name,
 					ParamType:    "Output",
+					Description:  svc.Description,
 				})
 			}
 		}
 	}
+
+	// 3. Search Structs (Struct Name Match OR Field Match)
+	for _, s := range catalog.Structs {
+		structMatch := normalize(s.Name) == normalizedQuery
+		fieldMatch := ""
+
+		if !structMatch {
+			for _, f := range s.Fields {
+				if normalize(f.Name) == normalizedQuery {
+					fieldMatch = f.Name
+					break // Found a matching field
+				}
+			}
+		}
+
+		if structMatch || fieldMatch != "" {
+			// Find services using this struct
+			servicesUsing, ok := structUsage[s.Name]
+			if ok {
+				for _, svc := range servicesUsing {
+					res := model.SearchResult{
+						Namespace:   svc.Namespace,
+						Method:      svc.Method,
+						Description: svc.Description,
+						StructName:  s.Name,
+					}
+					if structMatch {
+						res.MatchedParam = s.Name
+						res.ParamType = "Struct"
+					} else {
+						res.MatchedParam = s.Name + "." + fieldMatch
+						res.ParamType = "Struct Field"
+						res.FieldName = fieldMatch
+					}
+					results = append(results, res)
+				}
+			}
+		}
+	}
+
 	return results
 }
 
