@@ -37,15 +37,21 @@ Aquí ocurre la magia. Nexus no importa la librería para ejecutarla todavía; l
     *   Extrae nombres de parámetros y tipos de retorno.
     *   Extrae comentarios de documentación.
 3.  **Result**: Construye una estructura de datos en memoria (`Catalog`) que representa todo el árbol de funciones de la librería.
+4.  **Parsing de Estructuras (Structs)**: También busca `type X struct` exportados.
+    *   Analiza los campos exportados y sus tags JSON si existen.
+    *   Almacena esta metadata para recrear los structs idénticos en el cliente y servidor generado.
 
 #### Fase C: Generación de Código (Templates)
-Con el `Catalog` en memoria, Nexus escribe dos archivos Go críticos en tu carpeta `nexus/generated`.
+Con el `Catalog` en memoria, Nexus escribe **tres** archivos Go críticos en tu carpeta `nexus/generated`.
 
 **1. `server_gen.go` (El Servidor)**
 *   **Routing**: Crea un `mux.HandleFunc` por cada función descubierta (e.g., `libreria-a.system.GetSystemStatus`).
-*   **Adapters**: Crea funciones "wrapper" que:
+*   **Adapters**: Crea funciones "wrapper" que actúan como puente:
     *   Reciben un JSON genérico.
-    *   **Normalizan Parámetros**: Aplican lógica "Fuzzy" (e.g., si llega `user_id`, busca `UserID` o `UserId` en los inputs reales).
+    *   **Deserialización Inteligente (Map -> JSON -> Struct)**: 
+        *   Si la función espera un struct complejo (e.g. `UserFilter`), el adapter recibe un `map[string]interface{}` del JSON request.
+        *   Lo convierte a JSON (`json.Marshal`) y luego lo deserializa en el struct Go concreto (`json.Unmarshal`). Esto permite que el código original de la librería reciba sus structs nativos con cero cambios.
+    *   **Normalización de Primitivos**: Para tipos simples, aplica lógica "Fuzzy" (e.g., si llega `user_id`, busca `UserID` o `UserId`).
     *   Invocan la función real de la librería importada.
     *   Devuelven la respuesta en JSON.
 
@@ -62,8 +68,14 @@ Con el `Catalog` en memoria, Nexus escribe dos archivos Go críticos en tu carpe
     ```
 *   **Métodos**: Cada struct tiene métodos (e.g., `GetSystemStatus`) que hacen el `POST` HTTP al servidor con la ruta correcta.
 
+**3. `types_gen.go` (Tipos Compartidos)**
+*   Aquí se define `GenericRequest`.
+*   **Structs Replicados**: Nexus regenera aquí todos los structs encontrados en la Fase B.
+    *   Esto permite que el consumidor use `nexus.UserFilter` y sea compatible con lo que espera el servidor.
+    *   Se preservan los tipos de campos y tags JSON originales.
+
 #### Fase D: Compilación Final
-El desarrollador (tú) compila el proyecto (`go build`). Como `server_gen.go` y `sdk_gen.go` son archivos Go válidos que importan las librerías reales, el compilador de Go verifica que todo coincida (tipos, nombres, etc.).
+El dev compila el proyecto (`go build`). Como `server_gen.go` y `sdk_gen.go` son archivos Go válidos que importan las librerías reales, el compilador de Go verifica que todo coincida (tipos, nombres, etc.).
 
 ---
 
