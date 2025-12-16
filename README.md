@@ -59,4 +59,4 @@ nexus-cli build
 nexus-cli build --catalog-only
 ```
 
-Si estás colaborando, siempre sube los cambios de `nexus/generated` para que otros devs (o el CI/CD) tengan el servidor listo para correr.
+Si estás colaborando, siempre sube los cambios de `nexus/generated` para que otros devs (o el CI/CD) tengan el servidor listo para correr. 
